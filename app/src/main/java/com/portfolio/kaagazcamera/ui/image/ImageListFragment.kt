@@ -3,6 +3,7 @@ package com.portfolio.kaagazcamera.ui.image
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import com.portfolio.kaagazcamera.R
 import com.portfolio.kaagazcamera.databinding.FragmentImageListBinding
 import com.portfolio.kaagazcamera.domain.model.Image
@@ -17,7 +18,7 @@ class ImageListFragment : FragmentBase(R.layout.fragment_image_list) {
     @Inject
     lateinit var imageViewModel: ImageViewModel
 
-    private lateinit var imageThumbnailAdapter: ImageThumbnailAdapter
+    private lateinit var imageAdapter: ImageAdapter
 
     private var _binding: FragmentImageListBinding? = null
     private val binding get() = requireNotNull(_binding)
@@ -41,15 +42,16 @@ class ImageListFragment : FragmentBase(R.layout.fragment_image_list) {
     }
 
     private fun setAdapter() {
-        imageThumbnailAdapter = ImageThumbnailAdapter(::onImageClick)
-        binding.imageRecyclerView.adapter = imageThumbnailAdapter
+        imageAdapter = ImageAdapter(::onImageClick)
+        binding.imageRecyclerView.adapter = imageAdapter
+        binding.imageRecyclerView.layoutManager = GridLayoutManager(context, 2)
     }
 
     private fun setObservers() {
         imageViewModel.viewState.observe { viewState ->
             when (viewState) {
                 is Success -> {
-                    imageThumbnailAdapter.submitList(viewState.data)
+                    imageAdapter.submitList(viewState.data)
                 }
                 else -> {
                 }

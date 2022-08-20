@@ -9,6 +9,7 @@
         <entry key="app/src/main/res/layout/fragment_camera.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/fragment_image_list.xml" value="0.20878623188405798" />
         <entry key="app/src/main/res/layout/list_item_album.xml" value="0.20878623188405798" />
+        <entry key="app/src/main/res/layout/list_item_image.xml" value="0.20878623188405798" />
         <entry key="app/src/main/res/layout/list_item_image_thumbnail.xml" value="0.17798913043478262" />
       </map>
     </option>
