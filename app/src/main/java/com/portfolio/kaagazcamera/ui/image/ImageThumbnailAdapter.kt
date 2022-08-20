@@ -9,9 +9,9 @@ import com.portfolio.kaagazcamera.databinding.ListItemImageThumbnailBinding
 import com.portfolio.kaagazcamera.domain.model.Image
 
 class ImageThumbnailAdapter(private val onClick: (Image) -> Unit) :
-    ListAdapter<Image, ImageThumbnailAdapter.TokenViewHolder>(TokenDiffCallback) {
+    ListAdapter<Image, ImageThumbnailAdapter.ImageViewHolder>(ImageDiffCallback) {
 
-    class TokenViewHolder(
+    class ImageViewHolder(
         private val binding: ListItemImageThumbnailBinding,
         private val onClick: (Image) -> Unit
     ) :
@@ -24,8 +24,8 @@ class ImageThumbnailAdapter(private val onClick: (Image) -> Unit) :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TokenViewHolder {
-        return TokenViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
+        return ImageViewHolder(
             ListItemImageThumbnailBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -35,13 +35,13 @@ class ImageThumbnailAdapter(private val onClick: (Image) -> Unit) :
         )
     }
 
-    override fun onBindViewHolder(holder: TokenViewHolder, position: Int) {
-        val token = getItem(position)
-        holder.bind(token)
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        val image = getItem(position)
+        holder.bind(image)
     }
 }
 
-object TokenDiffCallback : DiffUtil.ItemCallback<Image>() {
+object ImageDiffCallback : DiffUtil.ItemCallback<Image>() {
     override fun areItemsTheSame(oldItem: Image, newItem: Image): Boolean {
         return oldItem.fileName == newItem.fileName
     }

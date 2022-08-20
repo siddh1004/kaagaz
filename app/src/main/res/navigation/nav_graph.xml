@@ -7,14 +7,28 @@
 
     <fragment
         android:id="@+id/albumListFragment"
-        android:name="com.portfolio.kaagazcamera.ui.AlbumListFragment"
+        android:name="com.portfolio.kaagazcamera.ui.album.AlbumListFragment"
         android:label="@string/album_list"
-        tools:layout="@layout/fragment_album_list" />
+        tools:layout="@layout/fragment_album_list">
+        <action
+            android:id="@+id/moveToImageListFragment"
+            app:destination="@id/imageListFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.portfolio.kaagazcamera.ui.camera.CameraFragment"
         android:label="@string/camera"
         tools:layout="@layout/fragment_camera" />
+
+    <fragment
+        android:id="@+id/imageListFragment"
+        android:name="com.portfolio.kaagazcamera.ui.image.ImageListFragment"
+        android:label="@string/image_list"
+        tools:layout="@layout/fragment_image_list">
+        <argument
+            android:name="album"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

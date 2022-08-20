@@ -138,7 +138,7 @@ class CameraFragment : FragmentBase(R.layout.fragment_camera) {
                         album = albumName
                     )
                     imageViewModel.saveImage(image)
-                    imageViewModel.getImages()
+                    imageViewModel.getImages(albumName)
                 }
             }
         )

@@ -1,5 +1,7 @@
 package com.portfolio.kaagazcamera.domain.di
 
+import com.portfolio.kaagazcamera.domain.interaction.album.GetAlbumUseCase
+import com.portfolio.kaagazcamera.domain.interaction.album.GetAlbumUseCaseImpl
 import com.portfolio.kaagazcamera.domain.interaction.image.ImageUseCase
 import com.portfolio.kaagazcamera.domain.interaction.image.ImageUseCaseImpl
 import dagger.Binds
@@ -15,4 +17,9 @@ abstract class InteractionModule {
     abstract fun bindImageUseCase(
         imageUseCaseImpl: ImageUseCaseImpl
     ): ImageUseCase
+
+    @Binds
+    abstract fun bindAlbumUseCase(
+        albumUseCaseImpl: GetAlbumUseCaseImpl
+    ): GetAlbumUseCase
 }

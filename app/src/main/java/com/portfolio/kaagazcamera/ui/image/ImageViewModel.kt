@@ -9,12 +9,8 @@ import javax.inject.Inject
 class ImageViewModel @Inject constructor(
     private val imageUseCase: ImageUseCase
 ) : ViewModelBase<List<Image>>() {
-    fun getImages(album: String? = null) = executeUseCase {
-        if (album.isNullOrEmpty()) {
-            _viewState.value = Success(imageUseCase.getImages())
-        } else {
-            _viewState.value = Success(imageUseCase.getImagesBasedOnAlbum(album))
-        }
+    fun getImages(album: String) = executeUseCase {
+        _viewState.value = Success(imageUseCase.getImagesBasedOnAlbum(album))
     }
 
     fun saveImage(image: Image) = executeUseCase {
