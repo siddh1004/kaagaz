@@ -1,5 +1,6 @@
 package com.portfolio.kaagazcamera.ui.album
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -17,9 +18,12 @@ class AlbumAdapter(private val onClick: (Album) -> Unit) :
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(item: Album) {
             binding.apply {
+                albumContainer.setOnClickListener { onClick.invoke(item) }
                 nameTextView.text = item.name
+                countTextView.text = "${item.totalImages} Images"
             }
         }
     }

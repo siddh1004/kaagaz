@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -16,6 +17,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.portfolio.kaagazcamera.R
 import com.portfolio.kaagazcamera.databinding.FragmentCameraBinding
 import com.portfolio.kaagazcamera.domain.model.Image
@@ -30,6 +32,7 @@ import java.util.UUID
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class CameraFragment : FragmentBase(R.layout.fragment_camera) {
@@ -66,6 +69,11 @@ class CameraFragment : FragmentBase(R.layout.fragment_camera) {
     private fun setAdapter() {
         imageThumbnailAdapter = ImageThumbnailAdapter(::onImageThumbnailClick)
         binding.imageThumbnailRecyclerView.adapter = imageThumbnailAdapter
+        binding.imageThumbnailRecyclerView.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
     }
 
     private fun setObservers() {
@@ -112,7 +120,10 @@ class CameraFragment : FragmentBase(R.layout.fragment_camera) {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/$albumName")
+                put(
+                    MediaStore.Images.Media.RELATIVE_PATH,
+                    "${Environment.DIRECTORY_PICTURES}/$albumName"
+                )
             }
         }
 
@@ -135,7 +146,8 @@ class CameraFragment : FragmentBase(R.layout.fragment_camera) {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val image = Image(
                         fileName = name,
-                        album = albumName
+                        album = albumName,
+                        uri = output.savedUri?.toString() ?: ""
                     )
                     imageViewModel.saveImage(image)
                     imageViewModel.getImages(albumName)

@@ -1,5 +1,7 @@
 package com.portfolio.kaagazcamera.ui.image
 
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -19,7 +21,11 @@ class ImageThumbnailAdapter(private val onClick: (Image) -> Unit) :
 
         fun bind(item: Image) {
             binding.apply {
-//                thumbnailImageView.setImageBitmap(item.bitmap)
+                try {
+                    thumbnailImageView.setImageURI(Uri.parse(item.uri))
+                } catch (ex: Exception) {
+                    Log.e("App", "Photo load failed: ${ex.message}", ex)
+                }
             }
         }
     }

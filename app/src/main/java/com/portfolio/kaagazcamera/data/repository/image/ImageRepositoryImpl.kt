@@ -18,7 +18,8 @@ class ImageRepositoryImpl @Inject constructor(
         imageDao.saveImage(
             ImageEntity(
                 fileName = image.fileName,
-                album = image.album
+                album = image.album,
+                uri = image.uri
             )
         )
     }

@@ -3,6 +3,7 @@ package com.portfolio.kaagazcamera.ui.album
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.portfolio.kaagazcamera.R
 import com.portfolio.kaagazcamera.databinding.FragmentAlbumListBinding
 import com.portfolio.kaagazcamera.domain.model.Album
@@ -42,6 +43,7 @@ class AlbumListFragment : FragmentBase(R.layout.fragment_album_list) {
     private fun setAdapter() {
         albumAdapter = AlbumAdapter(::onAlbumClick)
         binding.albumRecyclerView.adapter = albumAdapter
+        binding.albumRecyclerView.layoutManager = GridLayoutManager(context, 2)
     }
 
     private fun setObservers() {

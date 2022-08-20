@@ -11,10 +11,12 @@ data class ImageEntity(
     @PrimaryKey
     val fileName: String,
     val album: String,
+    val uri: String
 ) : DomainMapper<Image> {
 
     override fun mapToDomainModel() = Image(
         fileName = fileName,
-        album = album
+        album = album,
+        uri = uri
     )
 }
