@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/albumListFragment"
-        android:name="com.portfolio.kaagazcamera.AlbumListFragment"
+        android:name="com.portfolio.kaagazcamera.ui.AlbumListFragment"
         android:label="@string/album_list"
         tools:layout="@layout/fragment_album_list" />
 
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.portfolio.kaagazcamera.CameraFragment"
+        android:name="com.portfolio.kaagazcamera.ui.camera.CameraFragment"
         android:label="@string/camera"
         tools:layout="@layout/fragment_camera" />
 

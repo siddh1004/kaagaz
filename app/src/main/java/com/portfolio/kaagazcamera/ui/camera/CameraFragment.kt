@@ -1,4 +1,4 @@
-package com.portfolio.kaagazcamera
+package com.portfolio.kaagazcamera.ui.camera
 
 import android.Manifest
 import android.content.ContentValues
@@ -7,9 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -18,29 +16,76 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import com.portfolio.kaagazcamera.R
 import com.portfolio.kaagazcamera.databinding.FragmentCameraBinding
+import com.portfolio.kaagazcamera.domain.model.Image
+import com.portfolio.kaagazcamera.ui.base.FragmentBase
+import com.portfolio.kaagazcamera.ui.base.Success
+import com.portfolio.kaagazcamera.ui.image.ImageThumbnailAdapter
+import com.portfolio.kaagazcamera.ui.image.ImageViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.UUID
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import javax.inject.Inject
 
-private var _binding: FragmentCameraBinding? = null
-private val binding get() = requireNotNull(_binding)
+@AndroidEntryPoint
+class CameraFragment : FragmentBase(R.layout.fragment_camera) {
 
-private var imageCapture: ImageCapture? = null
+    @Inject
+    lateinit var imageViewModel: ImageViewModel
 
-private lateinit var cameraExecutor: ExecutorService
+    private lateinit var cameraExecutor: ExecutorService
 
-class CameraFragment : Fragment() {
+    private lateinit var imageThumbnailAdapter: ImageThumbnailAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentCameraBinding.inflate(inflater, container, false)
+    private var _binding: FragmentCameraBinding? = null
+    private val binding get() = requireNotNull(_binding)
 
+    private var imageCapture: ImageCapture? = null
+
+    private lateinit var albumName: String
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setViewBinding(view)
+        setAdapter()
+        setObservers()
+        setEventHandlers()
+        checkPermissionAndStartCamera()
+        albumName = UUID.randomUUID().toString().substring(0, 6)
+        cameraExecutor = Executors.newSingleThreadExecutor()
+    }
+
+    private fun setViewBinding(view: View) {
+        _binding = FragmentCameraBinding.bind(view)
+    }
+
+    private fun setAdapter() {
+        imageThumbnailAdapter = ImageThumbnailAdapter(::onImageThumbnailClick)
+        binding.imageThumbnailRecyclerView.adapter = imageThumbnailAdapter
+    }
+
+    private fun setObservers() {
+        imageViewModel.viewState.observe { viewState ->
+            when (viewState) {
+                is Success -> {
+                    imageThumbnailAdapter.submitList(viewState.data)
+                }
+                else -> {
+                    // do nothing
+                }
+            }
+        }
+    }
+
+    private fun setEventHandlers() {
+        binding.takePhoto.setOnClickListener { takePhoto() }
+    }
+
+    private fun checkPermissionAndStartCamera() {
         if (allPermissionsGranted()) {
             startCamera()
         } else {
@@ -48,12 +93,6 @@ class CameraFragment : Fragment() {
                 requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
             )
         }
-
-        setEventHandlers()
-
-        cameraExecutor = Executors.newSingleThreadExecutor()
-
-        return binding.root
     }
 
     override fun onDestroyView() {
@@ -62,9 +101,7 @@ class CameraFragment : Fragment() {
         cameraExecutor.shutdown()
     }
 
-    private fun setEventHandlers() {
-        binding.takePhoto.setOnClickListener { takePhoto() }
-    }
+    private fun onImageThumbnailClick(image: Image) {}
 
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
@@ -75,7 +112,7 @@ class CameraFragment : Fragment() {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/$albumName")
             }
         }
 
@@ -95,11 +132,13 @@ class CameraFragment : Fragment() {
                     Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                 }
 
-                override fun
-                        onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val msg = "Photo capture succeeded: ${output.savedUri}"
-                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, msg)
+                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                    val image = Image(
+                        fileName = name,
+                        album = albumName
+                    )
+                    imageViewModel.saveImage(image)
+                    imageViewModel.getImages()
                 }
             }
         )
@@ -161,7 +200,7 @@ class CameraFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "CameraXApp"
+        private const val TAG = "Kaagaz Camera"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS =

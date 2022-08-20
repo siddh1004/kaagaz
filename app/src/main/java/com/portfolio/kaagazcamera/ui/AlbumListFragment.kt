@@ -1,4 +1,4 @@
-package com.portfolio.kaagazcamera
+package com.portfolio.kaagazcamera.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.portfolio.kaagazcamera.R
 import com.portfolio.kaagazcamera.databinding.FragmentAlbumListBinding
 
 private var _binding: FragmentAlbumListBinding? = null
