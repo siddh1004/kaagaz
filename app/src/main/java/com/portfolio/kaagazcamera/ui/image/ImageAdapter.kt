@@ -1,6 +1,5 @@
 package com.portfolio.kaagazcamera.ui.image
 
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.portfolio.kaagazcamera.databinding.ListItemImageBinding
 import com.portfolio.kaagazcamera.domain.model.Image
+import com.portfolio.kaagazcamera.ui.extensions.loadUri
 
 class ImageAdapter(private val onClick: (Image) -> Unit) :
     ListAdapter<Image, ImageAdapter.ImageViewHolder>(ImageDiffCallback) {
@@ -21,7 +21,7 @@ class ImageAdapter(private val onClick: (Image) -> Unit) :
         fun bind(item: Image) {
             binding.apply {
                 try {
-                    image.setImageURI(Uri.parse(item.uri))
+                    image.loadUri(item.uri)
                 } catch (ex: Exception) {
                     Log.e("App", "Photo load failed: ${ex.message}", ex)
                 }

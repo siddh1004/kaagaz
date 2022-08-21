@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.portfolio.kaagazcamera.databinding.ListItemImageThumbnailBinding
 import com.portfolio.kaagazcamera.domain.model.Image
+import com.portfolio.kaagazcamera.ui.extensions.loadUri
 
 class ImageThumbnailAdapter(private val onClick: (Image) -> Unit) :
     ListAdapter<Image, ImageThumbnailAdapter.ImageViewHolder>(ImageDiffCallback) {
@@ -22,7 +23,7 @@ class ImageThumbnailAdapter(private val onClick: (Image) -> Unit) :
         fun bind(item: Image) {
             binding.apply {
                 try {
-                    thumbnailImageView.setImageURI(Uri.parse(item.uri))
+                    thumbnailImageView.loadUri(item.uri)
                 } catch (ex: Exception) {
                     Log.e("App", "Photo load failed: ${ex.message}", ex)
                 }
