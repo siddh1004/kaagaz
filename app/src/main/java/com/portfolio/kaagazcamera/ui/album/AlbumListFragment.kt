@@ -54,6 +54,7 @@ class AlbumListFragment : FragmentBase(R.layout.fragment_album_list) {
             when (viewState) {
                 is Success -> {
                     albumAdapter.submitList(viewState.data)
+                    binding.emptyStateTextView.isVisible = viewState.data.isEmpty()
                 }
                 else -> {
                 }

@@ -5,4 +5,5 @@
     <string name="camera">Camera</string>
     <string name="image_list">Image List</string>
     <string name="image_preview">Image Preview</string>
+    <string name="empty_view_album">Please click on \'+\' button to add photos</string>
 </resources>
