@@ -4,4 +4,5 @@
     <string name="album_list">Album List</string>
     <string name="camera">Camera</string>
     <string name="image_list">Image List</string>
+    <string name="image_preview">Image Preview</string>
 </resources>

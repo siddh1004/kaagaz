@@ -69,7 +69,7 @@ class CameraFragment : FragmentBase(R.layout.fragment_camera) {
     }
 
     private fun setAdapter() {
-        imageThumbnailAdapter = ImageThumbnailAdapter(::onImageThumbnailClick)
+        imageThumbnailAdapter = ImageThumbnailAdapter()
         binding.imageThumbnailRecyclerView.adapter = imageThumbnailAdapter
         binding.imageThumbnailRecyclerView.layoutManager = LinearLayoutManager(
             context,
@@ -111,8 +111,6 @@ class CameraFragment : FragmentBase(R.layout.fragment_camera) {
         _binding = null
         cameraExecutor.shutdown()
     }
-
-    private fun onImageThumbnailClick(image: Image) {}
 
     private fun takePhoto() {
         binding.progress.isVisible = true
@@ -202,7 +200,6 @@ class CameraFragment : FragmentBase(R.layout.fragment_camera) {
         requestCode: Int, permissions: Array<String>, grantResults:
         IntArray
     ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
                 startCamera()

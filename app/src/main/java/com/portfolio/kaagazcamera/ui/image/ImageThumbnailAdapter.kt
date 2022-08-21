@@ -1,6 +1,5 @@
 package com.portfolio.kaagazcamera.ui.image
 
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,12 +10,11 @@ import com.portfolio.kaagazcamera.databinding.ListItemImageThumbnailBinding
 import com.portfolio.kaagazcamera.domain.model.Image
 import com.portfolio.kaagazcamera.ui.extensions.loadUri
 
-class ImageThumbnailAdapter(private val onClick: (Image) -> Unit) :
+class ImageThumbnailAdapter :
     ListAdapter<Image, ImageThumbnailAdapter.ImageViewHolder>(ImageDiffCallback) {
 
     class ImageViewHolder(
         private val binding: ListItemImageThumbnailBinding,
-        private val onClick: (Image) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -37,8 +35,7 @@ class ImageThumbnailAdapter(private val onClick: (Image) -> Unit) :
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ),
-            onClick
+            )
         )
     }
 

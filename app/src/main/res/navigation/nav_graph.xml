@@ -32,6 +32,22 @@
         <argument
             android:name="album"
             app:argType="string" />
+        <action
+            android:id="@+id/moveToImagePreviewFragment"
+            app:destination="@id/imagePreviewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/imagePreviewFragment"
+        android:name="com.portfolio.kaagazcamera.ui.image.ImagePreviewFragment"
+        android:label="@string/image_preview"
+        tools:layout="@layout/fragment_image_preview">
+        <argument
+            android:name="album"
+            app:argType="string" />
+        <argument
+            android:name="position"
+            app:argType="integer" />
     </fragment>
 
 </navigation>

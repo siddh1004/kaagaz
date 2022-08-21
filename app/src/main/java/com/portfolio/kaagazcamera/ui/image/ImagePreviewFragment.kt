@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.tabs.TabLayoutMediator
 import com.portfolio.kaagazcamera.R
-import com.portfolio.kaagazcamera.databinding.FragmentImageListBinding
+import com.portfolio.kaagazcamera.databinding.FragmentImagePreviewBinding
 import com.portfolio.kaagazcamera.ui.base.FragmentBase
 import com.portfolio.kaagazcamera.ui.base.Loading
 import com.portfolio.kaagazcamera.ui.base.Success
@@ -14,17 +14,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ImageListFragment : FragmentBase(R.layout.fragment_image_list) {
+class ImagePreviewFragment : FragmentBase(R.layout.fragment_image_preview) {
 
     @Inject
     lateinit var imageViewModel: ImageViewModel
 
-    private lateinit var imageAdapter: ImageAdapter
+    private lateinit var imagePreviewAdapter: ImagePreviewAdapter
 
-    private var _binding: FragmentImageListBinding? = null
+    private var _binding: FragmentImagePreviewBinding? = null
     private val binding get() = requireNotNull(_binding)
 
-    private val navArgs: ImageListFragmentArgs by navArgs()
+    private val navArgs: ImagePreviewFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,13 +39,15 @@ class ImageListFragment : FragmentBase(R.layout.fragment_image_list) {
     }
 
     private fun setBindings(view: View) {
-        _binding = FragmentImageListBinding.bind(view)
+        _binding = FragmentImagePreviewBinding.bind(view)
     }
 
     private fun setAdapter() {
-        imageAdapter = ImageAdapter(::onImageClick)
-        binding.imageRecyclerView.adapter = imageAdapter
-        binding.imageRecyclerView.layoutManager = GridLayoutManager(context, 2)
+        imagePreviewAdapter = ImagePreviewAdapter()
+        binding.viewPager.adapter = imagePreviewAdapter
+
+        TabLayoutMediator(binding.tabLayout, binding.viewPager)
+        { _, _ -> }.attach()
     }
 
     private fun setObservers() {
@@ -53,16 +55,13 @@ class ImageListFragment : FragmentBase(R.layout.fragment_image_list) {
             binding.progress.isVisible = viewState is Loading
             when (viewState) {
                 is Success -> {
-                    imageAdapter.submitList(viewState.data)
+                    imagePreviewAdapter.submitList(viewState.data)
+                    binding.viewPager.setCurrentItem(navArgs.position, false)
                 }
                 else -> {
                 }
             }
         }
-    }
-
-    private fun onImageClick(position: Int) {
-        navigateTo(ImageListFragmentDirections.moveToImagePreviewFragment(navArgs.album, position))
     }
 
     override fun onDestroy() {

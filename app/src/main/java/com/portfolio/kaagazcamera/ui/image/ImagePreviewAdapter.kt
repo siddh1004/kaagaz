@@ -1,28 +1,29 @@
 package com.portfolio.kaagazcamera.ui.image
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.portfolio.kaagazcamera.databinding.ListItemImageBinding
+import com.portfolio.kaagazcamera.databinding.ListItemFullScreenImageBinding
 import com.portfolio.kaagazcamera.domain.model.Image
 import com.portfolio.kaagazcamera.ui.extensions.loadUri
 
-class ImageAdapter(private val onClick: (Int) -> Unit) :
-    ListAdapter<Image, ImageAdapter.ImageViewHolder>(ImageDiffCallback) {
+
+class ImagePreviewAdapter :
+    ListAdapter<Image, ImagePreviewAdapter.ImageViewHolder>(ImageDiffCallback) {
 
     class ImageViewHolder(
-        private val binding: ListItemImageBinding,
-        private val onClick: (Int) -> Unit
+        private val binding: ListItemFullScreenImageBinding,
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Image) {
             binding.apply {
-                image.setOnClickListener { onClick.invoke(adapterPosition) }
                 try {
-                    image.loadUri(item.uri)
+                    imageViewMain.loadUri(item.uri, ColorDrawable(Color.WHITE))
                 } catch (ex: Exception) {
                     Log.e("App", "Photo load failed: ${ex.message}", ex)
                 }
@@ -32,12 +33,11 @@ class ImageAdapter(private val onClick: (Int) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         return ImageViewHolder(
-            ListItemImageBinding.inflate(
+            ListItemFullScreenImageBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ),
-            onClick
+            )
         )
     }
 
