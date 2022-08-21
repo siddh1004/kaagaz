@@ -17,11 +17,13 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.portfolio.kaagazcamera.R
 import com.portfolio.kaagazcamera.databinding.FragmentCameraBinding
 import com.portfolio.kaagazcamera.domain.model.Image
 import com.portfolio.kaagazcamera.ui.base.FragmentBase
+import com.portfolio.kaagazcamera.ui.base.Loading
 import com.portfolio.kaagazcamera.ui.base.Success
 import com.portfolio.kaagazcamera.ui.image.ImageThumbnailAdapter
 import com.portfolio.kaagazcamera.ui.image.ImageViewModel
@@ -78,6 +80,7 @@ class CameraFragment : FragmentBase(R.layout.fragment_camera) {
 
     private fun setObservers() {
         imageViewModel.viewState.observe { viewState ->
+            binding.progress.isVisible = viewState is Loading
             when (viewState) {
                 is Success -> {
                     imageThumbnailAdapter.submitList(viewState.data)
@@ -112,6 +115,8 @@ class CameraFragment : FragmentBase(R.layout.fragment_camera) {
     private fun onImageThumbnailClick(image: Image) {}
 
     private fun takePhoto() {
+        binding.progress.isVisible = true
+
         val imageCapture = imageCapture ?: return
 
         val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
@@ -140,6 +145,7 @@ class CameraFragment : FragmentBase(R.layout.fragment_camera) {
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
+                    binding.progress.isVisible = false
                     Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                 }
 

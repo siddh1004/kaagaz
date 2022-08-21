@@ -2,12 +2,14 @@ package com.portfolio.kaagazcamera.ui.album
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.portfolio.kaagazcamera.R
 import com.portfolio.kaagazcamera.databinding.FragmentAlbumListBinding
 import com.portfolio.kaagazcamera.domain.model.Album
 import com.portfolio.kaagazcamera.ui.base.FragmentBase
+import com.portfolio.kaagazcamera.ui.base.Loading
 import com.portfolio.kaagazcamera.ui.base.Success
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -48,6 +50,8 @@ class AlbumListFragment : FragmentBase(R.layout.fragment_album_list) {
 
     private fun setObservers() {
         albumViewModel.viewState.observe { viewState ->
+            binding.progress.isVisible = viewState is Loading
+
             when (viewState) {
                 is Success -> {
                     albumAdapter.submitList(viewState.data)
