@@ -3,7 +3,6 @@ package com.portfolio.kaagazcamera.ui.album
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.portfolio.kaagazcamera.R
 import com.portfolio.kaagazcamera.databinding.FragmentAlbumListBinding
@@ -64,7 +63,7 @@ class AlbumListFragment : FragmentBase(R.layout.fragment_album_list) {
 
     private fun setEventHandlers() {
         binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.cameraFragment)
+            navigateTo(AlbumListFragmentDirections.moveToCameraFragment())
         }
     }
 

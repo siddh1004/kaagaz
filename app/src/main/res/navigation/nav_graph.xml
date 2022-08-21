@@ -13,6 +13,9 @@
         <action
             android:id="@+id/moveToImageListFragment"
             app:destination="@id/imageListFragment" />
+        <action
+            android:id="@+id/moveToCameraFragment"
+            app:destination="@id/cameraFragment" />
     </fragment>
 
     <fragment
